@@ -29,6 +29,14 @@ app.use( bodyParser.urlencoded( {
 app.use( methodOverride( '_method' ) );
 app.use( cookieParser() );
 
+// -------------------------------
+// Initialize Passport and restore authentication state, if any, from the
+// session.
+// -------------------------------
+
+app.use( passport.initialize() );
+app.use( passport.session() );
+
 
 // -------------------------------
 // routes
@@ -41,11 +49,6 @@ var users = require( './routes/users' );
 
 app.use( '/', routes );
 app.use( '/users', users );
-
-
-
-
-
 
 
 // ---------------------------------
@@ -67,6 +70,17 @@ passport.use( new FacebookStrategy( {
 	}
 ) );
 
+// ---------------------------------
+// Configure Passport authenticated session persistence.
+// ---------------------------------
+
+passport.serializeUser( function( user, cb ) {
+	cb( null, user );
+} );
+
+passport.deserializeUser( function( obj, cb ) {
+	cb( null, obj );
+} );
 
 
 // -------------------------------
