@@ -36,6 +36,10 @@ var routes = require( './routes/index' );
 var users = require( './routes/users' );
 
 
+app.use( '/', routes );
+app.use( '/users', users );
+
+
 
 // -------------------------------
 // users function
@@ -46,22 +50,11 @@ function users() {
 }
 
 
-
 app.get( '/', function( req, res ) {
-	res.redirect( '/' );
-} );
-
-app.post( '/', function( req, res ) {
-	var user = req.body;
-
-	users().insert( {
-		name: user.name,
-		age: user.age
-	} ).then( function( result ) {
-		res.send( 'welcome' );
+	res.render( 'index', {
+		user: req.user
 	} );
 } );
-
 
 
 // -------------------------------
