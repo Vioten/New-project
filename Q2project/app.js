@@ -34,8 +34,23 @@ app.use( cookieParser() );
 // session.
 // -------------------------------
 
+app.use( cookieSession( {
+	name: 'session',
+	keys: [ process.env[ 'SECRET_KEY' ] ]
+} ) );
 app.use( passport.initialize() );
 app.use( passport.session() );
+
+passport.serializeUser( function( user, done ) {
+	//later this will be where you selectively send to the browser an identifier for your user, like their primary key from the database, or their ID from linkedin
+	done( null, user );
+} );
+
+passport.deserializeUser( function( obj, done ) {
+	//here is where you will go to the database and get the user each time from it's id, after you set up your db
+	done( null, obj );
+} );
+
 
 
 // -------------------------------
@@ -47,9 +62,6 @@ var routes = require( './routes/index' );
 var users = require( './routes/users' );
 
 
-app.use( '/', routes );
-app.use( '/users', users );
-
 
 // ---------------------------------
 // Facebook Strategy
@@ -59,7 +71,9 @@ app.use( '/users', users );
 passport.use( new FacebookStrategy( {
 		clientID: FACEBOOK_APP_ID,
 		clientSecret: FACEBOOK_APP_SECRET,
-		callbackURL: "http://localhost:3000/auth/facebook/callback"
+		callbackURL: "http://localhost:3000/auth/facebook/callback",
+		scope: [ 'r_emailaddress', 'r_basicprofile' ],
+
 	},
 	function( accessToken, refreshToken, profile, cb ) {
 		User.findOrCreate( {
@@ -69,6 +83,12 @@ passport.use( new FacebookStrategy( {
 		} );
 	}
 ) );
+
+
+app.use( '/auth', auth );
+app.use( '/', routes );
+app.use( '/users', users );
+
 
 // ---------------------------------
 // Configure Passport authenticated session persistence.

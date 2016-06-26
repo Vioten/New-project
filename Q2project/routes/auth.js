@@ -1,14 +1,19 @@
 var express = require( 'express' );
-var router = express.Router();
 var passport = require( 'passport' );
 var favicon = require( 'serve-favicon' );
 var cookieSession = require( 'cookie-session' );
 var FacebookStrategy = require( 'passport-facebook' ).Strategy;
+var router = express.Router();
 
 
 
 router.get( '/auth/facebook',
-	passport.authenticate( 'facebook' ) );
+	passport.authenticate( 'facebook', {
+		state: 'SOME STATE'
+	} ),
+	function( req, res {
+
+	} ) );
 
 router.get( '/auth/facebook/callback',
 	passport.authenticate( 'facebook', {
