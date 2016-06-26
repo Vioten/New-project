@@ -3,13 +3,14 @@ var router = express.Router();
 var passport = require( 'passport' );
 var favicon = require( 'serve-favicon' );
 var cookieSession = require( 'cookie-session' );
+var FacebookStrategy = require( 'passport-facebook' ).Strategy;
 
 
 
-app.get( '/auth/facebook',
+router.get( '/auth/facebook',
 	passport.authenticate( 'facebook' ) );
 
-app.get( '/auth/facebook/callback',
+router.get( '/auth/facebook/callback',
 	passport.authenticate( 'facebook', {
 		failureRedirect: '/login'
 	} ),
