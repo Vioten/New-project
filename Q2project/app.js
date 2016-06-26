@@ -3,6 +3,7 @@ var http = require( 'http' );
 var path = require( 'path' );
 var passport = require( 'passport' );
 var cookieSession = require( 'cookie-session' );
+var FacebookStrategy = require( 'passport-facebook' ).Strategy;
 var favicon = require( 'serve-favicon' );
 var logger = require( 'morgan' );
 var cookieParser = require( 'cookie-parser' );
@@ -41,6 +42,30 @@ var users = require( './routes/users' );
 app.use( '/', routes );
 app.use( '/users', users );
 
+
+
+
+
+
+
+// ---------------------------------
+// Facebook Strategy
+// ---------------------------------
+
+
+passport.use( new FacebookStrategy( {
+		clientID: FACEBOOK_APP_ID,
+		clientSecret: FACEBOOK_APP_SECRET,
+		callbackURL: "http://localhost:3000/auth/facebook/callback"
+	},
+	function( accessToken, refreshToken, profile, cb ) {
+		User.findOrCreate( {
+			facebookId: profile.id
+		}, function( err, user ) {
+			return cb( err, user );
+		} );
+	}
+) );
 
 
 

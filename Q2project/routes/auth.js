@@ -6,18 +6,16 @@ var cookieSession = require( 'cookie-session' );
 
 
 
+app.get( '/auth/facebook',
+	passport.authenticate( 'facebook' ) );
 
-router.post( '/login',
-	passport.authenticate( 'local' ),
+app.get( '/auth/facebook/callback',
+	passport.authenticate( 'facebook', {
+		failureRedirect: '/login'
+	} ),
 	function( req, res ) {
-		res.redirect( '/users/' + req.user.username );
+		// Successful authentication, redirect home.
+		res.redirect( '/' );
 	} );
-
-
-router.get( '/', function( req, res ) {
-	req.logout();
-	res.redirect( '/' );
-} );
-
 
 module.exports = router;
