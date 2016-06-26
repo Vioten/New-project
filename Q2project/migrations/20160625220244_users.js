@@ -5,7 +5,7 @@ exports.up = function( knex, Promise ) {
 		table.string( 'username' );
 		table.string( 'email' );
 		table.integer( 'age' );
-		table.timestamp( 'created_at' ).defaultTo( knex.fn.now() );
+		// table.timestamp( 'created_at' ).defaultTo( knex.fn.now() );
 	} );
 
 };
