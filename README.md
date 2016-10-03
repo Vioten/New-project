@@ -1,2 +1,2 @@
 # PuppyLink website
-pupplink.herokuapp.com
+puppylink.herokuapp.com
